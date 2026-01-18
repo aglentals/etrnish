@@ -3,218 +3,231 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Etrnish — Luau Developer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <title>Yon / Etrnish</title>
+
   <style>
     :root {
-      --bg: #05070d;
-      --card: rgba(255,255,255,0.06);
-      --accent: #7c7cff;
-      --accent-2: #42ffd2;
-      --text: #e9ecf1;
-      --muted: #9aa4b2;
-      --glow: 0 0 40px rgba(124,124,255,0.35);
+      --bg: #0a0a0f;
+      --glass: rgba(255, 255, 255, 0.08);
+      --border: rgba(255, 255, 255, 0.15);
+      --text: #eaeaf0;
+      --muted: #a1a1b3;
+      --accent: #6cf2c2;
+      --accent2: #7aa2ff;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
 
     body {
-      margin: 0;
-      font-family: 'Inter', system-ui, sans-serif;
-      background: radial-gradient(1200px 600px at 20% -10%, rgba(124,124,255,0.15), transparent 40%),
-                  radial-gradient(1000px 500px at 90% 10%, rgba(66,255,210,0.12), transparent 45%),
-                  var(--bg);
+      background: radial-gradient(circle at top, #111122, var(--bg));
       color: var(--text);
+      min-height: 100vh;
       overflow-x: hidden;
     }
 
-    .noise {
-      pointer-events: none;
+    /* Animated background glow */
+    .glow {
       position: fixed;
-      inset: 0;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="120" height="120" filter="url(%23n)" opacity="0.04"/></svg>');
-      z-index: 1;
+      width: 500px;
+      height: 500px;
+      background: linear-gradient(45deg, var(--accent), var(--accent2));
+      filter: blur(180px);
+      opacity: 0.25;
+      animation: float 12s ease-in-out infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .glow.one { top: -100px; left: -100px; }
+    .glow.two { bottom: -150px; right: -150px; animation-delay: -6s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) translateX(0); }
+      50% { transform: translateY(-60px) translateX(40px); }
     }
 
     header {
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      position: relative;
-      z-index: 2;
-      padding: 4rem 1.5rem;
+      padding: 120px 24px 80px;
+      max-width: 1200px;
+      margin: auto;
     }
 
-    .hero {
-      max-width: 980px;
-      width: 100%;
-      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 24px;
-      padding: 4rem 3.5rem;
-      backdrop-filter: blur(18px);
-      box-shadow: 0 40px 120px rgba(0,0,0,0.55);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: -2px;
-      background: linear-gradient(120deg, transparent 20%, rgba(124,124,255,0.35), transparent 60%);
-      opacity: 0.4;
-      pointer-events: none;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.45rem 0.85rem;
-      border-radius: 999px;
-      background: rgba(124,124,255,0.15);
-      color: var(--accent);
-      font-weight: 600;
-      font-size: 0.85rem;
-      letter-spacing: 0.04em;
-      margin-bottom: 1.2rem;
-    }
-
-    h1 {
-      font-size: clamp(2.8rem, 6vw, 4.2rem);
-      line-height: 1.05;
-      margin: 0 0 1.2rem 0;
+    header h1 {
+      font-size: clamp(3rem, 6vw, 5rem);
       font-weight: 800;
-    }
-
-    h1 span {
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .subtitle {
-      font-size: 1.15rem;
+    header p {
+      margin-top: 20px;
+      max-width: 700px;
+      font-size: 1.1rem;
       color: var(--muted);
-      max-width: 720px;
-      margin-bottom: 2.4rem;
+      line-height: 1.6;
     }
 
-    .stats {
+    section {
+      max-width: 1200px;
+      margin: auto;
+      padding: 60px 24px;
+    }
+
+    .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1.5rem;
-      margin: 3rem 0;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
     }
 
-    .stat {
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,0.12);
+    .card {
+      background: var(--glass);
+      backdrop-filter: blur(18px);
+      border: 1px solid var(--border);
       border-radius: 18px;
-      padding: 1.8rem 1.6rem;
+      padding: 28px;
       position: relative;
       overflow: hidden;
+      transition: transform 0.4s ease, border 0.4s ease;
     }
 
-    .stat::after {
+    .card::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: radial-gradient(300px 120px at 20% 0%, rgba(124,124,255,0.18), transparent 60%);
-      opacity: 0.6;
-      pointer-events: none;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.08), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
     }
 
-    .stat h3 {
-      margin: 0;
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--accent);
+    .card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(255,255,255,0.35);
     }
 
-    .stat p {
-      margin: 0.4rem 0 0 0;
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .card span {
       color: var(--muted);
       font-size: 0.95rem;
     }
 
-    .project {
-      margin-top: 3.5rem;
-      padding: 2.5rem 2.5rem;
-      border-radius: 20px;
-      background: linear-gradient(135deg, rgba(124,124,255,0.18), rgba(66,255,210,0.12));
-      border: 1px solid rgba(255,255,255,0.18);
-      box-shadow: var(--glow);
-    }
-
-    .project h2 {
-      margin: 0 0 0.8rem 0;
-      font-size: 2.2rem;
-      font-weight: 800;
-    }
-
-    .project p {
-      margin: 0;
-      font-size: 1.05rem;
-      color: #f0f3ff;
-      max-width: 720px;
+    .highlight {
+      color: var(--accent);
+      font-weight: 600;
     }
 
     footer {
-      padding: 3rem 1.5rem;
+      padding: 60px 24px;
       text-align: center;
       color: var(--muted);
       font-size: 0.9rem;
-      position: relative;
-      z-index: 2;
     }
 
-    @media (max-width: 720px) {
-      .hero { padding: 2.8rem 2rem; }
-      .project { padding: 2rem; }
+    /* Reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
     }
   </style>
 </head>
 <body>
-  <div class="noise"></div>
 
-  <header>
-    <section class="hero">
-      <div class="badge">Luau Developer</div>
-      <h1>Hi there, I'm <span>Etrnish</span>.</h1>
-      <p class="subtitle">
-        I have 2+ years of Luau experience, contributing to over 6+ million visits across multiple games.
-        Combat-focused systems are my specialty, and I’m constantly pushing for polished, responsive gameplay.
-      </p>
+  <div class="glow one"></div>
+  <div class="glow two"></div>
 
-      <div class="stats">
-        <div class="stat">
-          <h3>2+ Years</h3>
-          <p>Luau Development</p>
-        </div>
-        <div class="stat">
-          <h3>6M+</h3>
-          <p>Total Game Visits</p>
-        </div>
-        <div class="stat">
-          <h3>Combat</h3>
-          <p>Primary Focus</p>
-        </div>
-      </div>
-
-      <div class="project">
-        <h2>Current Project: Solobound</h2>
-        <p>
-          Solobound is my personal game project where I’m bringing together advanced combat mechanics,
-          clean architecture, and long-term scalability — built entirely with performance and feel in mind.
-        </p>
-      </div>
-    </section>
+  <header class="reveal">
+    <h1>Yon / Etrnish</h1>
+    <p>
+      Hello there, my name is <span class="highlight">Yon</span>, also known as <span class="highlight">Etrnish</span>.
+      I am a <span class="highlight">15-year-old Roblox developer</span> focused primarily on
+      Roblox Studio and advanced Luau systems. I’ve contributed to
+      <span class="highlight">6M+ visits</span> across multiple large-scale games.
+    </p>
   </header>
 
-  <footer>
-    © 2026 Etrnish. Built with Luau-level obsession.
+  <section class="reveal">
+    <div class="grid">
+      <div class="card">
+        <h3>Experience</h3>
+        <span>6M+ contributed visits across live games</span>
+      </div>
+
+      <div class="card">
+        <h3>Current Project</h3>
+        <span>Solobound</span>
+      </div>
+
+      <div class="card">
+        <h3>Development Hub</h3>
+        <span>Yon Hub GEN 2</span>
+      </div>
+
+      <div class="card">
+        <h3>Age</h3>
+        <span>15</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="reveal">
+    <div class="grid">
+      <div class="card">
+        <h3>Previous Work</h3>
+        <span>
+          Former owner of Yon Hub, Axolotl Hub, and Vision Hub.
+          Former developer of Saturn Hub, Yon Hub, and Axolotl Hub
+          Contributed to games such as Untitled Slayer, Christmas Home Tycoon,
+          and Hire a Digger.
+        </span>
+      </div>
+
+      <div class="card">
+        <h3>Growth</h3>
+        <span>
+          I acknowledge my past mistakes and my activity of being a "skid".
+          I am now a significantly different developer, focused on actual creating code,
+          focused on roblox studio, and fun systems.
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <footer class="reveal">
+    © 2026 — Yon / Etrnish. All rights reserved.
   </footer>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, { threshold: 0.15 });
+
+    reveals.forEach(r => observer.observe(r));
+  </script>
+
 </body>
 </html>
